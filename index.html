@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>合并图片</title>
+    <script type="text/javascript" src="js/html2canvas.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+
+    <style>
+      #bg {
+        /*width: 540px;*/
+        /*height: 960px;*/
+        width: 720px;
+        height: 1280px;
+        background: rgb(245, 245, 245);
+        display: grid;
+        place-items: center;
+        float: left;
+      }
+      #show {
+        width: 540px;
+        height: 960px;
+	display:none;
+      }
+      #phone_box {
+        width: 330px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 3;
+      }
+      #time {
+        width: auto;
+        height: 625px;
+        position: absolute;
+        top: 30px;
+        left: 20px;
+        z-index: 2;
+      }
+      #phone {
+        position: relative;
+        width: 330px;
+        height: 674px;
+      }
+      .img {
+        width: 289px;
+        height: 625px;
+        position: absolute;
+        top: 30px;
+        left: 20px;
+        z-index: 1px;
+        overflow: hidden;
+      }
+      #img {
+        width: auto;
+        height: 630px;
+        left: 0px;
+        position: absolute;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div style="width: 100%; height: 970px">
+      <div id="bg">
+        <div id="phone">
+          <img src="img/iPhone_Mask_1.png" id="phone_box" />
+          <img src="img/lockscreen-2.png" id="time" />
+          <div class="img">
+            <img src="img/14.jpg" id="img" />
+          </div>
+        </div>
+      </div>
+
+      <div style="margin: 20px; padding: 5px; float: left">
+        <input
+          type="file"
+          accept="image/*"
+          onchange="reads(this)"
+          style="display: block; margin: 5px"
+        />
+        <input
+          type="number"
+
+          id="num"
+          value=""
+          style="
+margin: 5px;
+    height: 25px;
+    width: 65px;
+    font-size: 18px;
+          "
+        />正数往右，负数往左
+        <button onClick="show()" style="display: block; margin: 5px">
+          生成图片
+        </button>
+
+      </div>
+    </div>
+    <div id="show"></div>
+  </body>
+  <script>
+    function enter() {
+      var val = $("#num").val();
+      $("#img").css({
+        left: +val + "px",
+      });
+    }
+var n = 1;
+    function show() {
+	
+      html2canvas(document.getElementById("bg")).then(function (canvas) {
+        document.getElementById("show").appendChild(canvas);
+	 var imgUri = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream"); // 获取生成的图片的url 
+         var saveLink = document.createElement('a');
+         saveLink.href = imgUri;
+         saveLink.download = n + '.png';
+         saveLink.click();
+	n=n+1;
+		  
+      });
+    }
+
+    function reads(obj) {
+      var file = obj.files[0];
+      var reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = function (ev) {
+        $("#img").attr("src", ev.target.result);
+        $("#show").html("");
+      };
+    }
+	  
+	  	$("#num").on('input propertychange',function(){
+			enter();
+        });
+
+
+function downloadpic(e) {
+            var image = canvas.toDataURL("image/jpg", 1);
+            e.href = image;
+        };
+	  
+  </script>
+</html>
